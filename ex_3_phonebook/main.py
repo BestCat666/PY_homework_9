@@ -46,7 +46,7 @@ def answer1(msg):
     sheet = wb.active
     id_ = 1
     for row in range(sheet.max_row + 1, sheet.max_row + 2):        
-        sheet[row][0].value = row - 1
+        sheet[row][0].value = row - 2
         sheet[row][1].value = surname 
         sheet[row][2].value = first_name 
         sheet[row][3].value = patronym 
