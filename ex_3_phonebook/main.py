@@ -10,7 +10,7 @@ from openpyxl import load_workbook
 
 os.chdir(os.path.dirname(__file__))
  
-TOKEN = '5644346942:AAHdonF5jp5F55D0KWf1ZBdOOfsyTwIay8s'
+TOKEN = '5848062866:AAGAOErpX2wTs6ZTlhhi7Br1svmunlKvXkI'
 bot = TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
@@ -65,17 +65,18 @@ def answer3(msg: types.Message):
     d1 = pandas.read_excel(filename)
     d2 = pandas.read_excel('my_project.xlsx')
     d3 = pandas.concat([d2, d1], axis = 0, ignore_index = True)
-    d3 = d3.reset_index()
+    d3 = d3.reset_index(inplace = False, drop = True)
+    d3['ID'] = d3.index
+    d3 = d3.set_index('ID')
     d3.to_excel('my_project.xlsx')
+    
     # wb = load_workbook(d3)
     # sheet = wb.active
-    # for row in range(sheet.max_row + 1, sheet.max_row + 2):        
-    #     sheet[row][0].value = row - 1
+    # d3 = d3.reset_index(inplace = True)
     # wb.save('my_project.xlsx') 
+    
     # wb.to_excel('my_project.xlsx')
     # wb.close() 
-
-
 
 bot.polling()
 

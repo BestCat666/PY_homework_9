@@ -76,6 +76,7 @@ while True:
         font = pygame.font.SysFont('stxingkai', 200)
         text = font.render(game_over,True,black)
         screen.blit(text,[200,200])
+        # exit()
 
         
     
