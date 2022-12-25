@@ -31,8 +31,7 @@ def answer(msg: types.Message):
             patronym = sheet[row][3].value
             phone = sheet[row][4].value
             comment = sheet[row][5].value
-            txt = f'{surname}, {first_name}, {patronym}, {phone}, {comment}'
-            # txt = surname, first_name, patronym, phone, comment        
+            txt = f'{surname}, {first_name}, {patronym}, {phone}, {comment}'      
             bot.send_message(chat_id=msg.from_user.id, text = txt)
     
     # if text == '2':   #  вывод содержимого каждой ячейки отдельным сообщением                 
@@ -66,6 +65,7 @@ def answer1(msg):
     wb.save(filename) 
     wb.close() 
     bot.send_message(chat_id=msg.from_user.id, text='Запись добавлена')
+
 
 @bot.message_handler(content_types=['document'])
 def answer3(msg: types.Message):
