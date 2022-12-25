@@ -6,7 +6,7 @@ from openpyxl import load_workbook
 
 os.chdir(os.path.dirname(__file__))
  
-TOKEN = '5848062866:AAGAOErpX2wTs6ZTlhhi7Br1svmunlKvXkI'
+TOKEN = ''
 bot = TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
