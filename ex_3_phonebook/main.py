@@ -6,7 +6,7 @@ from openpyxl import load_workbook
 
 os.chdir(os.path.dirname(__file__))
  
-TOKEN = ''
+TOKEN = '5848062866:AAGAOErpX2wTs6ZTlhhi7Br1svmunlKvXkI'
 bot = TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
@@ -55,16 +55,22 @@ def answer1(msg):
     wb = load_workbook(filename)
     sheet = wb.active
     id_ = 0
-    for row in range(sheet.max_row + 1, sheet.max_row + 2):        
-        sheet[row][0].value = row - 2
-        sheet[row][1].value = surname 
-        sheet[row][2].value = first_name 
-        sheet[row][3].value = patronym 
-        sheet[row][4].value = phone
-        sheet[row][5].value = comment
-    wb.save(filename) 
-    wb.close() 
-    bot.send_message(chat_id=msg.from_user.id, text='Запись добавлена')
+    for row in range(sheet.max_row + 1, sheet.max_row + 2):
+        if surname.isalpha() and first_name.isalpha() and patronym.isalpha() and phone.isdigit() and comment.isalpha():       
+            sheet[row][0].value = row - 2
+            sheet[row][1].value = surname 
+            sheet[row][2].value = first_name 
+            sheet[row][3].value = patronym 
+            sheet[row][4].value = phone
+            sheet[row][5].value = comment
+            wb.save(filename) 
+            wb.close() 
+            bot.send_message(chat_id=msg.from_user.id, text='Запись добавлена')
+        else:
+            bot.send_message(chat_id=msg.from_user.id, text='Ошибка. Вы прислали: ' + msg.text + ', проверьте введённые данные')
+    # wb.save(filename) 
+    # wb.close() 
+    # bot.send_message(chat_id=msg.from_user.id, text='Запись добавлена')
 
 
 @bot.message_handler(content_types=['document'])
