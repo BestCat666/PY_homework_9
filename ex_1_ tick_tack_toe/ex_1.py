@@ -1,10 +1,11 @@
 #3.Создайте программу для игры в "Крестики-нолик
 import pygame
-# import sys
 pygame.init()
 
 def check_win(lst,sign):
+    zeroes = 0
     for row in lst:
+        zeroes = zeroes + row.count(0)
         if row.count(sign) == 3:
             return sign
     for col in range(3):
@@ -14,6 +15,8 @@ def check_win(lst,sign):
             return sign
         if lst[0][2] == sign and lst[1][1] == sign and lst[2][0] == sign:
             return sign
+        if zeroes == 0:
+            return 'nobody'
     return False
 
 
@@ -34,11 +37,12 @@ black = (0, 0, 0)
 
 lst = [[0] * 3 for i in range(3)]                  
 query = 0 #1 2 3 4 5 6 7 8 
+game_over = False
 while True:                                  
     for event in pygame.event.get():
         if event.type == pygame.QUIT:        
             quit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN and not game_over:
             x_mouse, y_mouse = pygame.mouse.get_pos()   # получение координат при нажатии мышки
             col = x_mouse // (size_block + margin)
             row = y_mouse // (size_block + margin)
@@ -48,8 +52,6 @@ while True:
                 else:
                     lst[row][col] = 'O'
                 query = query + 1
-
-
 
     for row in range(3): 
         for col in range(3):
@@ -73,13 +75,12 @@ while True:
         game_over = check_win(lst,'O')
 
     if game_over:
+        screen.fill(black)
         font = pygame.font.SysFont('stxingkai', 200)
-        text = font.render(game_over,True,black)
+        text = font.render(game_over,True,white)
         screen.blit(text,[200,200])
-        # exit()
-
         
-    
+
     pygame.display.update()                                            
     
 #img = pygame.image.load("путь к файлу с картинкой") иконка окна программы
