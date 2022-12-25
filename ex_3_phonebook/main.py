@@ -1,7 +1,3 @@
-# import getting
-# import reading
-# import import_inform
-# import export_inform
 from telebot import TeleBot, types
 import os
 import pandas
@@ -10,12 +6,12 @@ from openpyxl import load_workbook
 
 os.chdir(os.path.dirname(__file__))
  
-TOKEN = '5848062866:AAGAOErpX2wTs6ZTlhhi7Br1svmunlKvXkI'
+TOKEN = ''
 bot = TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
 def answer(msg: types.Message):
-    bot.send_message(chat_id=msg.from_user.id, text='Введите номер операции: 1 - добавление записи, 2 - вывод записи на экран, 3 - импорт, 4 - экспорт, 5 - выход из программы')
+    bot.send_message(chat_id=msg.from_user.id, text='Введите номер операции: 1 - добавление записи, 2 - вывод записи на экран, 3 - импорт, 4 - экспорт')
 
 
 @bot.message_handler()
@@ -25,12 +21,27 @@ def answer(msg: types.Message):
         bot.register_next_step_handler(msg, answer1)
         bot.send_message(chat_id=msg.from_user.id, text='Введите фамилию, имя, отчество, номер телефона и комментраий через пробел')
     
+
     if text == '2':                     
         book = openpyxl.open('my_project.xlsx', 'r')
         sheet = book.active
-        for row in sheet.iter_rows():
-            for cell in row:
-                bot.send_message(chat_id=msg.from_user.id, text = cell.value)
+        for row in range(1, sheet.max_row + 1):
+            surname = sheet[row][1].value 
+            first_name  = sheet[row][2].value
+            patronym = sheet[row][3].value
+            phone = sheet[row][4].value
+            comment = sheet[row][5].value
+            txt = f'{surname}, {first_name}, {patronym}, {phone}, {comment}'
+            # txt = surname, first_name, patronym, phone, comment        
+            bot.send_message(chat_id=msg.from_user.id, text = txt)
+    
+    # if text == '2':   #  вывод содержимого каждой ячейки отдельным сообщением                 
+    #     book = openpyxl.open('my_project.xlsx', 'r')
+    #     sheet = book.active
+    #     for row in range(1, sheet.max_row + 1):
+    #         for cell in row:
+    #             bot.send_message(chat_id=msg.from_user.id, text = cell.value)
+            
 
     if text == '3':
         bot.send_message(chat_id=msg.from_user.id, text='Добавьте документ для импортирования')
@@ -44,7 +55,7 @@ def answer1(msg):
     filename = 'my_project.xlsx'
     wb = load_workbook(filename)
     sheet = wb.active
-    id_ = 1
+    id_ = 0
     for row in range(sheet.max_row + 1, sheet.max_row + 2):        
         sheet[row][0].value = row - 2
         sheet[row][1].value = surname 
@@ -54,7 +65,7 @@ def answer1(msg):
         sheet[row][5].value = comment
     wb.save(filename) 
     wb.close() 
-
+    bot.send_message(chat_id=msg.from_user.id, text='Запись добавлена')
 
 @bot.message_handler(content_types=['document'])
 def answer3(msg: types.Message):
@@ -70,13 +81,5 @@ def answer3(msg: types.Message):
     d3 = d3.set_index('ID')
     d3.to_excel('my_project.xlsx')
     
-    # wb = load_workbook(d3)
-    # sheet = wb.active
-    # d3 = d3.reset_index(inplace = True)
-    # wb.save('my_project.xlsx') 
-    
-    # wb.to_excel('my_project.xlsx')
-    # wb.close() 
-
 bot.polling()
 
