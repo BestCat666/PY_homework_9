@@ -6,7 +6,7 @@ file = 'logger.txt'
 now = str(datetime.datetime.now())
 os.chdir(os.path.dirname(__file__))
 
-TOKEN = '5848062866:AAEi62QLgjgOwi8Cr-c81EkpcwKhWbdEe6k'
+TOKEN = ''
 bot = TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
